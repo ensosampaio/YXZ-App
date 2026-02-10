@@ -1,5 +1,6 @@
 package com.enzo.yxzapp.Model;
 
+import com.enzo.yxzapp.Enum.AdminColor;
 import com.enzo.yxzapp.Enum.UserRole;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
