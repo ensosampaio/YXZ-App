@@ -1,7 +1,7 @@
 package com.enzo.yxzapp.model;
 
-import com.enzo.yxzapp.Enum.AdminColor;
-import com.enzo.yxzapp.Enum.UserRole;
+import com.enzo.yxzapp.enums.AdminColor;
+import com.enzo.yxzapp.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

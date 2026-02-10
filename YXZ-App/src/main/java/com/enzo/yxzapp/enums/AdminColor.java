@@ -1,4 +1,4 @@
-package com.enzo.yxzapp.Enum;
+package com.enzo.yxzapp.enums;
 
 public enum AdminColor {
     PINK,
