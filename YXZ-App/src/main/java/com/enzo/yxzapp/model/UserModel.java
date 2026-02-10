@@ -1,4 +1,4 @@
-package com.enzo.yxzapp.Model;
+package com.enzo.yxzapp.model;
 
 import com.enzo.yxzapp.Enum.AdminColor;
 import com.enzo.yxzapp.Enum.UserRole;
@@ -6,12 +6,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
