@@ -2,9 +2,7 @@ package com.enzo.yxzapp.model;
 
 import com.enzo.yxzapp.enums.*;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -17,15 +15,10 @@ import java.util.List;
 @Table(name = "oficinas")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
 public class Oficina {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(nullable = false)
@@ -60,18 +53,12 @@ public class Oficina {
     @Column(nullable = false)
     private StatusOficina status = StatusOficina.AGENDADA;
 
-    /**
-     * LAZY para evitar carregar User em toda consulta.
-     * Retorne DTO no controller.
-     */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "criador_id", nullable = false)
-    @ToString.Exclude
     private User criador;
 
     @Column(name = "criador_nome", nullable = false)
     private String criadorNome;
-
 
     @Enumerated(EnumType.STRING)
     @Column(name = "cor_criador", nullable = false)
@@ -83,7 +70,6 @@ public class Oficina {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ultimo_atualizador_id")
-    @ToString.Exclude
     private User ultimoAtualizador;
 
     @Column(name = "ultimo_atualizador_nome")
@@ -99,33 +85,11 @@ public class Oficina {
     private List<String> instrutores = new ArrayList<>();
 
     @Column(name = "avaliacao_escola")
-    private Integer avaliacaoEscola; // 1..10 (valide no DTO/service)
+    private Integer avaliacaoEscola;
 
     @Column(name = "quantitativo_aluno")
     private Integer quantitativoAluno;
 
     @Column(name = "acompanhante_turma")
     private String acompanhanteTurma;
-
-    public void setCriadorInfo(User user) {
-        this.criador = user;
-        this.criadorNome = user.getNome();
-
-        if (user.getRole() == Role.ADMIN) {
-            if (user.getCorAdministradora() == null) {
-                throw new IllegalStateException("ADMIN sem cor definida");
-            }
-            this.corCriador = user.getCorAdministradora();
-        } else if (user.getRole() == Role.ROOT) {
-
-            this.corCriador = CorAdministradora.ROXO;
-        } else {
-            throw new IllegalStateException("Usuário comum não pode criar oficina");
-        }
-    }
-
-    public void setAtualizadorInfo(User user) {
-        this.ultimoAtualizador = user;
-        this.ultimoAtualizadorNome = user.getNome();
-    }
 }
