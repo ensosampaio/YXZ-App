@@ -82,7 +82,7 @@ public class Oficina {
     @UpdateTimestamp
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
-    
+
     @ElementCollection
     @CollectionTable(name = "oficina_instrutores", joinColumns = @JoinColumn(name = "oficina_id"))
     @Column(name = "instrutor")
