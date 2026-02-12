@@ -19,16 +19,34 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
+    public SecurityFilterChain filterChain(
+            HttpSecurity http,
+            JwtAuthFilter jwtAuthFilter,
+            RestAuthenticationEntryPoint entryPoint,
+            RestAccessDeniedHandler accessDeniedHandler
+    ) throws Exception {
+
         http
                 .cors(cors -> {})
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(entryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
+                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // público
                         .requestMatchers("/auth/**").permitAll()
+
+                        // só ROOT
                         .requestMatchers("/admin/**").hasRole("ROOT")
+
+                        // autenticado (ROOT/ADMIN/USER)
                         .requestMatchers("/oficinas/**", "/calendar/**").authenticated()
+
+                        // fallback seguro
                         .anyRequest().denyAll()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
