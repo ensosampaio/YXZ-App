@@ -15,14 +15,10 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(nullable = false)
@@ -46,8 +42,10 @@ public class User {
     private boolean ativo = true;
 
     @CreationTimestamp
-     private LocalDateTime criadoEm;
+    @Column(name = "criado_em", nullable = false, updatable = false)
+    private LocalDateTime criadoEm;
 
     @UpdateTimestamp
+    @Column(name = "atualizado_em")
     private LocalDateTime atualizadoEm;
 }
