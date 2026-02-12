@@ -13,76 +13,96 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "workshops")
+@Table(name = "oficinas")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class WorkshopModel {
+public class Oficina {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String school;
+    private String escola;
 
     @Column(nullable = false)
-    private String city;
+    private String cidade;
 
     @Column(nullable = false)
-    private LocalDate date;
+    private LocalDate data;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private WorkshopType type;
+    private TipoOficina tipo;
 
-    @Column(name = "school_contact", nullable = false)
-    private String schoolContact;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Segment segment;
+    @Column(name = "contato_escola", nullable = false)
+    private String contatoEscola;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Shift shift;
+    private Segmento segmento;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ClassGroup classGroup;
+    private Turno turno;
+
+    @Column(nullable = false)
+    private String turma; // Ex: "6° ano", "1° ano médio"
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private WorkshopStatus status = WorkshopStatus.AGENDADA;
+    private StatusOficina status = StatusOficina.AGENDADA;
 
+    // Informações do criador (RF07)
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "created_id", nullable = false)
-    private UserModel user;
+    @JoinColumn(name = "criador_id", nullable = false)
+    private User criador;
 
-    @Column(name = "created_name", nullable = false)
-    private String userName;
+    @Column(name = "criador_nome", nullable = false)
+    private String criadorNome;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "cor_criador", nullable = false)
+    private CorAdministradora corCriador;
 
     @CreationTimestamp
     @Column(name = "data_criacao", nullable = false, updatable = false)
     private LocalDateTime dataCriacao;
 
+    // Informações de atualização (RF11)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "last_update_id")
-    private UserModel lastUpdate;
+    @JoinColumn(name = "ultimo_atualizador_id")
+    private User ultimoAtualizador;
 
-    @Column(name = "last_update_name")
-    private String lastUpdateName;
+    @Column(name = "ultimo_atualizador_nome")
+    private String ultimoAtualizadorNome;
 
     @UpdateTimestamp
-    @Column(name = "update_data")
-    private LocalDateTime updateData;
+    @Column(name = "data_atualizacao")
+    private LocalDateTime dataAtualizacao;
 
+    // Campos do modal de atualização (RF10)
     @ElementCollection
-    @CollectionTable(name = "workshop_instructors", joinColumns = @JoinColumn(name = "workshop_id"))
-    @Column(name = "instructor")
-    private List<String> instructor = new ArrayList<>();
+    @CollectionTable(name = "oficina_instrutores", joinColumns = @JoinColumn(name = "oficina_id"))
+    @Column(name = "instrutor")
+    private List<String> instrutores = new ArrayList<>();
 
+    @Column(name = "avaliacao_escola")
+    private Integer avaliacaoEscola; // 1 a 10
 
+    // Método auxiliar para definir quem criou
+    public void setCriadorInfo(User user) {
+        this.criador = user;
+        this.criadorNome = user.getNome();
+        this.corCriador = user.getCorAdministradora();
+    }
+
+    // Método auxiliar para registrar quem atualizou
+    public void setAtualizadorInfo(User user) {
+        this.ultimoAtualizador = user;
+        this.ultimoAtualizadorNome = user.getNome();
+    }
 
 
 }
