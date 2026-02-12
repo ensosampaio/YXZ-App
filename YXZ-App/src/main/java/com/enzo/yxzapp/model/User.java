@@ -3,25 +3,26 @@ package com.enzo.yxzapp.model;
 import com.enzo.yxzapp.enums.CorAdministradora;
 import com.enzo.yxzapp.enums.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.util.Collection;
-import java.util.List;
+
+import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements UserDetails {
+
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(nullable = false)
@@ -39,44 +40,14 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "cor_administradora")
-    private CorAdministradora corAdministradora; // Apenas para ADMINs
+    private CorAdministradora corAdministradora;
 
     @Column(nullable = false)
-    private Boolean ativo = true;
+    private boolean ativo = true;
 
-    // Implementação do UserDetails para Spring Security
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
-    }
+    @CreationTimestamp
+     private LocalDateTime criadoEm;
 
-    @Override
-    public String getPassword() {
-        return senha;
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return ativo;
-    }
+    @UpdateTimestamp
+    private LocalDateTime atualizadoEm;
 }
