@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.management.relation.Role;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -26,30 +27,26 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String nome;
 
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
-    private String passwordHash;
+    private String senha;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserRole role;
+    private Role role;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "admin_color")
-    private AdminColor adminColor;
+    @Column(name = "cor_administradora")
+    private CorAdministradora corAdministradora; // Apenas para ADMINs
 
     @Column(nullable = false)
-    private boolean enabled = true;
+    private Boolean ativo = true;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    private LocalDateTime updatedAt = LocalDateTime.now();
-
+    // Implementação do UserDetails para Spring Security
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
@@ -57,7 +54,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return passwordHash;
+        return senha;
     }
 
     @Override
@@ -82,6 +79,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return ativo;
     }
 }
