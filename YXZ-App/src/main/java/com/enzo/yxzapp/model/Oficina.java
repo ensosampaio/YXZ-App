@@ -49,8 +49,9 @@ public class Oficina {
     @Column(nullable = false)
     private Turno turno;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String turma; // Ex: "6° ano", "1° ano médio"
+    private String turma;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
