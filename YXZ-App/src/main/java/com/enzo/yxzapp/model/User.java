@@ -1,5 +1,6 @@
 package com.enzo.yxzapp.model;
 
+import com.enzo.yxzapp.enums.CorAdministradora;
 import com.enzo.yxzapp.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

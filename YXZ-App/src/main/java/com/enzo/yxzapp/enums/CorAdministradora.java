@@ -1,6 +1,6 @@
 package com.enzo.yxzapp.enums;
 
-public enum AdminColor {
+public enum CorAdministradora {
     PINK,
     SKY_BLUE,
     AMBER,
