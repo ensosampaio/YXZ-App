@@ -50,7 +50,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (JwtException ex) {
-            // token inválido/expirado → deixa sem auth; rota protegida retornará 401
+
             SecurityContextHolder.clearContext();
         }
 
