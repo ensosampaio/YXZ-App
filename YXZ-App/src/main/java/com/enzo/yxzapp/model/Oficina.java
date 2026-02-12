@@ -1,6 +1,7 @@
 package com.enzo.yxzapp.model;
 
 import com.enzo.yxzapp.enums.CorAdministradora;
+import com.enzo.yxzapp.enums.Segmento;
 import com.enzo.yxzapp.enums.Turno;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
