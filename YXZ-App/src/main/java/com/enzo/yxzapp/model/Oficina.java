@@ -57,7 +57,6 @@ public class Oficina {
     @Column(nullable = false)
     private StatusOficina status = StatusOficina.AGENDADA;
 
-    // Informações do criador (RF07)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "criador_id", nullable = false)
     private User criador;
@@ -73,7 +72,6 @@ public class Oficina {
     @Column(name = "data_criacao", nullable = false, updatable = false)
     private LocalDateTime dataCriacao;
 
-    // Informações de atualização (RF11)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ultimo_atualizador_id")
     private User ultimoAtualizador;
@@ -84,8 +82,7 @@ public class Oficina {
     @UpdateTimestamp
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
-
-    // Campos do modal de atualização (RF10)
+    
     @ElementCollection
     @CollectionTable(name = "oficina_instrutores", joinColumns = @JoinColumn(name = "oficina_id"))
     @Column(name = "instrutor")
