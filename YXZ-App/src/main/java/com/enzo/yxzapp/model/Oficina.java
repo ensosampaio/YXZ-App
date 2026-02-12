@@ -93,14 +93,16 @@ public class Oficina {
     @Column(name = "avaliacao_escola")
     private Integer avaliacaoEscola; // 1 a 10
 
-    // Método auxiliar para definir quem criou
+    @Column(name = "quantitativo_aluno")
+    private Integer quantitativoAluno;
+
     public void setCriadorInfo(User user) {
         this.criador = user;
         this.criadorNome = user.getNome();
         this.corCriador = user.getCorAdministradora();
     }
 
-    // Método auxiliar para registrar quem atualizou
+
     public void setAtualizadorInfo(User user) {
         this.ultimoAtualizador = user;
         this.ultimoAtualizadorNome = user.getNome();
