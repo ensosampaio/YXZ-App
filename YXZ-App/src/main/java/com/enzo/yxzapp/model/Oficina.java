@@ -51,7 +51,7 @@ public class Oficina {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String turma;
+    private Turma turma;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
