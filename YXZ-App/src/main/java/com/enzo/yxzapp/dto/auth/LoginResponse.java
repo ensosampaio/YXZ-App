@@ -1,4 +1,10 @@
 package com.enzo.yxzapp.dto.auth;
 
-public class LoginResponse {
-}
+import com.enzo.yxzapp.enums.Role;
+
+public record LoginResponse(
+        String token,
+        Long userId,
+        String nome,
+        Role role
+) {}
