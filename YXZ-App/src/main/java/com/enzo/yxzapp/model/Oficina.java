@@ -96,6 +96,9 @@ public class Oficina {
     @Column(name = "quantitativo_aluno")
     private Integer quantitativoAluno;
 
+    @Column(name = "acompanhante_turma")
+    private String acompanhanteTurma;
+
     public void setCriadorInfo(User user) {
         this.criador = user;
         this.criadorNome = user.getNome();
