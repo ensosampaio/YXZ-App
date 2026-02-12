@@ -61,7 +61,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         } catch (JwtException ex) {
             SecurityContextHolder.clearContext();
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            // opcional: escrever JSON padrão aqui (ou configurar AuthenticationEntryPoint)
         }
     }
 }
