@@ -1,6 +1,6 @@
 package com.enzo.yxzapp.enums;
 
-public enum UserRole {
+public enum Role {
     ROOT,
     ADMIN,
     USER
