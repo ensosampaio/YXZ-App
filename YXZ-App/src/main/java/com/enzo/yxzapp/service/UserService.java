@@ -1,0 +1,5 @@
+package com.enzo.yxzapp.service;
+
+public interface UserService {
+    
+}
