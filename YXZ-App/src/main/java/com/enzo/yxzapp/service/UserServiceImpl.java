@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService{
 
         User saved = userRepository.save(user);
 
-        return toResponse(saved);
+        return UserResponse.fromEntity(saved);
     }
 
     @Override
