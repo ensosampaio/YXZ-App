@@ -16,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserResponse create(CreateUserRequest req) {
-        if (userRepository.existsByEmail(req.email())) {
+        if (userRepository.existsByEmail(normalizeEmail(req.email()))) {
             throw new BadRequestException("Usuário já cadastrado");
         }
 
@@ -44,22 +44,15 @@ public class UserServiceImpl implements UserService{
             throw new BadRequestException("Somente ADMIN pode ter corAdministradora");
         }
 
-
         User user = new User();
-        user.setNome(req.nome());
-        user.setEmail(req.email());
+        user.setNome(normalizeName(req.nome()));
+        user.setEmail(normalizeEmail(req.email()));
         user.setSenha(encoder.encode(req.senha()));
         user.setRole(req.role());
         user.setAtivo(true);
-
-        if (req.role() == Role.ADMIN) {
-            user.setCorAdministradora(req.corAdministradora());
-        } else {
-            user.setCorAdministradora(null);
-        }
+        user.setCorAdministradora(req.role() == Role.ADMIN ? req.corAdministradora() : null);
 
         User saved = userRepository.save(user);
-
         return UserResponse.fromEntity(saved);
     }
 
@@ -68,32 +61,44 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
+        boolean isRootUser = user.getRole() == Role.ROOT;
+
+        // nome (PATCH parcial)
         if (req.nome() != null && !req.nome().isBlank()) {
-            user.setNome(req.nome().trim());
+            user.setNome(normalizeName(req.nome()));
         }
 
+        // ativo (PATCH parcial)
         if (req.ativo() != null) {
+            if (isRootUser && !req.ativo()) {
+                throw new BadRequestException("Não é permitido desativar o usuário ROOT");
+            }
             user.setAtivo(req.ativo());
         }
 
+        // role/cor (PATCH parcial) — valida conjunto
         Role newRole = (req.role() != null) ? req.role() : user.getRole();
-        CorAdministradora newColor = (req.role() != null || req.corAdministradora() != null)
-                ? req.corAdministradora()
-                : user.getCorAdministradora();
 
-        if (user.getRole() == Role.ROOT && newRole != Role.ROOT) {
-            throw new BadRequestException("Não é permitido alterar o usuário ROOT");
-        }
-        if (newRole == Role.ROOT && user.getRole() != Role.ROOT) {
+        // Bloqueios envolvendo ROOT
+        if (newRole == Role.ROOT && !isRootUser) {
             throw new BadRequestException("Não é permitido promover usuário para ROOT");
         }
+        if (isRootUser && newRole != Role.ROOT) {
+            throw new BadRequestException("Não é permitido alterar o role do usuário ROOT");
+        }
 
-        // Regras de cor
+        CorAdministradora newColor;
+        if (req.role() != null || req.corAdministradora() != null) {
+            newColor = req.corAdministradora();
+        } else {
+            newColor = user.getCorAdministradora();
+        }
+
         if (newRole == Role.ADMIN && newColor == null) {
             throw new BadRequestException("ADMIN precisa ter uma corAdministradora");
         }
         if (newRole != Role.ADMIN) {
-            newColor = null;
+            newColor = null; // garante consistência
         }
 
         user.setRole(newRole);
@@ -115,4 +120,15 @@ public class UserServiceImpl implements UserService{
                 .map(UserResponse::fromEntity)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
     }
+
+    private String normalizeEmail(String email) {
+        if (email == null) return null;
+        return email.trim().toLowerCase();
+    }
+
+    private String normalizeName(String nome) {
+        if (nome == null) return null;
+        return nome.trim().replaceAll("\\s+", " ");
+    }
 }
+
