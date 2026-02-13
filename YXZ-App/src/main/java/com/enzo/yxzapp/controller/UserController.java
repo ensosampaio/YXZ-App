@@ -4,6 +4,7 @@ import com.enzo.yxzapp.dto.common.PageResponse;
 import com.enzo.yxzapp.dto.user.CreateUserRequest;
 import com.enzo.yxzapp.dto.user.UpdateUserRequest;
 import com.enzo.yxzapp.dto.user.UserResponse;
+import com.enzo.yxzapp.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
