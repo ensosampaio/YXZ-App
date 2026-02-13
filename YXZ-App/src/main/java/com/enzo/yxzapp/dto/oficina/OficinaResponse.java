@@ -1,6 +1,7 @@
 package com.enzo.yxzapp.dto.oficina;
 
 import com.enzo.yxzapp.enums.*;
+import com.enzo.yxzapp.model.Oficina;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,11 +20,35 @@ public record OficinaResponse(
         StatusOficina status,
         List<String> instrutores,
         Integer avaliacaoEscola,
-        Integer quantitativoAluno,   // pode ser null
-        String acompanhanteTurma,    // pode ser null
+        Integer quantitativoAluno,
+        String acompanhanteTurma,
         String criadorNome,
         CorAdministradora corCriador,
         LocalDateTime dataCriacao,
         String ultimoAtualizadorNome,
         LocalDateTime dataAtualizacao
-) {}
+) {
+    public static OficinaResponse fromEntity(Oficina o) {
+        return new OficinaResponse(
+                o.getId(),
+                o.getEscola(),
+                o.getCidade(),
+                o.getData(),
+                o.getTipo(),
+                o.getContatoEscola(),
+                o.getSegmento(),
+                o.getTurno(),
+                o.getTurma(),
+                o.getStatus(),
+                o.getInstrutores(),
+                o.getAvaliacaoEscola(),
+                o.getQuantitativoAluno(),
+                o.getAcompanhanteTurma(),
+                o.getCriadorNome(),
+                o.getCorCriador(),
+                o.getDataCriacao(),
+                o.getUltimoAtualizadorNome(),
+                o.getDataAtualizacao()
+        );
+    }
+}
