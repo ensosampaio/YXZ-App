@@ -28,20 +28,16 @@ public class OficinaServiceImpl implements OficinaService {
     @Override
     @Transactional
     public OficinaResponse create(CreateOficinaRequest req) {
-        // Buscar usuário logado
         User criador = getUsuarioLogado();
 
-        // Validar que é ADMIN
         if (criador.getRole() != Role.ADMIN) {
             throw new BadRequestException("Apenas administradores podem criar oficinas");
         }
 
-        // Validar que ADMIN tem cor
         if (criador.getCorAdministradora() == null) {
             throw new BadRequestException("Administrador deve ter uma cor definida");
         }
 
-        // Criar oficina
         Oficina oficina = new Oficina();
         oficina.setEscola(req.escola());
         oficina.setCidade(req.cidade());
@@ -51,17 +47,14 @@ public class OficinaServiceImpl implements OficinaService {
         oficina.setSegmento(req.segmento());
         oficina.setTurno(req.turno());
         oficina.setTurma(req.turma());
-
-        // Status inicial
         oficina.setStatus(StatusOficina.AGENDADA);
 
-        // Relacionamento com criador
-        oficina.setCriador(criador);
+        // Snapshot do criador
+        oficina.setCriadorNome(criador.getNome());
+        oficina.setCorCriador(criador.getCorAdministradora());
+        oficina.setCriadorId(criador.getId());
 
-        // Salvar
         Oficina salva = oficinaRepository.save(oficina);
-
-        // Retornar response
         return OficinaResponse.fromEntity(salva);
     }
 
