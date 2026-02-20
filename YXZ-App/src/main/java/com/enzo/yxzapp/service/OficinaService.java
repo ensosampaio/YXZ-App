@@ -11,4 +11,5 @@ public interface OficinaService {
     OficinaResponse create(CreateOficinaRequest req);
     OficinaResponse update(Long id, UpdateViaModalRequest req);
     PageResponse<OficinaResponse> list(Pageable pageable);
+    OficinaResponse getById(Long id);
 }
