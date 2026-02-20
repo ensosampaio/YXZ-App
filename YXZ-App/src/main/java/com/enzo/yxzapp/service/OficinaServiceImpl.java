@@ -136,85 +136,108 @@ public class OficinaServiceImpl implements OficinaService {
                 .map(OficinaResponse::fromEntity)
                 .orElseThrow(() -> new NotFoundException("Oficina não encontrada"));
     }
-
+    
     @Override
     @Transactional(readOnly = true)
-    public Page<OficinaResponse> listarTodas(Pageable pageable) {
-        return oficinaRepository.findAll(pageable)
-                .map(OficinaResponse::fromEntity);
+    public PageResponse<OficinaResponse> filtrarPorTipo(TipoOficina tipo, Pageable pageable) {
+
+        Page<Oficina> page = oficinaRepository.findByTipo(tipo, pageable);
+
+        return PageResponse.fromPage(page, OficinaResponse::fromEntity);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<OficinaResponse> filtrarPorTipo(TipoOficina tipo, Pageable pageable) {
-        return oficinaRepository.findByTipo(tipo, pageable)
-                .map(OficinaResponse::fromEntity);
+    public PageResponse<OficinaResponse> filtrarPorCidade(String cidade, Pageable pageable) {
+
+        Page<Oficina> page = oficinaRepository
+                .findByCidadeContainingIgnoreCase(cidade, pageable);
+
+        return PageResponse.fromPage(page, OficinaResponse::fromEntity);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<OficinaResponse> filtrarPorCidade(String cidade, Pageable pageable) {
-        return oficinaRepository.findByCidadeContainingIgnoreCase(cidade, pageable)
-                .map(OficinaResponse::fromEntity);
+    public PageResponse<OficinaResponse> filtrarPorPeriodo(
+            LocalDate inicio,
+            LocalDate fim,
+            Pageable pageable) {
+
+        Page<Oficina> page = oficinaRepository
+                .findByDataBetween(inicio, fim, pageable);
+
+        return PageResponse.fromPage(page, OficinaResponse::fromEntity);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<OficinaResponse> filtrarPorPeriodo(LocalDate dataInicio, LocalDate dataFim, Pageable pageable) {
-        return oficinaRepository.findByDataBetween(dataInicio, dataFim, pageable)
-                .map(OficinaResponse::fromEntity);
+    public PageResponse<OficinaResponse> filtrarPorData(LocalDate data, Pageable pageable) {
+
+        Page<Oficina> page = oficinaRepository.findByData(data, pageable);
+
+        return PageResponse.fromPage(page, OficinaResponse::fromEntity);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<OficinaResponse> filtrarPorData(LocalDate data, Pageable pageable) {
-        return oficinaRepository.findByData(data, pageable)
-                .map(OficinaResponse::fromEntity);
+    public PageResponse<OficinaResponse> filtrarCombinado(
+            TipoOficina tipo,
+            String cidade,
+            LocalDate inicio,
+            LocalDate fim,
+            Pageable pageable) {
+
+        Page<Oficina> page = oficinaRepository
+                .findByFiltros(tipo, cidade, inicio, fim, pageable);
+
+        return PageResponse.fromPage(page, OficinaResponse::fromEntity);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<OficinaResponse> filtrarCombinado(TipoOficina tipo, String cidade,
-                                                  LocalDate dataInicio, LocalDate dataFim,
-                                                  Pageable pageable) {
-        return oficinaRepository.findByFiltros(tipo, cidade, dataInicio, dataFim, pageable)
-                .map(OficinaResponse::fromEntity);
-    }
+    public PageResponse<OficinaResponse> filtrarPorPeriodoMercadologico(Pageable pageable) {
 
-    @Override
-    @Transactional(readOnly = true)
-    public Page<OficinaResponse> filtrarPorPeriodoMercadologico(Pageable pageable) {
         LocalDate hoje = LocalDate.now();
         LocalDate inicio = hoje.minusMonths(1).withDayOfMonth(21);
         LocalDate fim = hoje.withDayOfMonth(20);
 
-        return oficinaRepository.findByDataBetween(inicio, fim, pageable)
-                .map(OficinaResponse::fromEntity);
+        Page<Oficina> page = oficinaRepository
+                .findByDataBetween(inicio, fim, pageable);
+
+        return PageResponse.fromPage(page, OficinaResponse::fromEntity);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<OficinaResponse> filtrarPorPeriodoMensal(Pageable pageable) {
+    public PageResponse<OficinaResponse> filtrarPorPeriodoMensal(Pageable pageable) {
+
         YearMonth mesAtual = YearMonth.now();
-        LocalDate inicio = mesAtual.atDay(1);
-        LocalDate fim = mesAtual.atEndOfMonth();
 
-        return oficinaRepository.findByDataBetween(inicio, fim, pageable)
-                .map(OficinaResponse::fromEntity);
+        Page<Oficina> page = oficinaRepository.findByDataBetween(
+                mesAtual.atDay(1),
+                mesAtual.atEndOfMonth(),
+                pageable
+        );
+
+        return PageResponse.fromPage(page, OficinaResponse::fromEntity);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<OficinaResponse> filtrarPorStatus(StatusOficina status, Pageable pageable) {
-        return oficinaRepository.findByStatus(status, pageable)
-                .map(OficinaResponse::fromEntity);
+    public PageResponse<OficinaResponse> filtrarPorStatus(StatusOficina status, Pageable pageable) {
+
+        Page<Oficina> page = oficinaRepository.findByStatus(status, pageable);
+
+        return PageResponse.fromPage(page, OficinaResponse::fromEntity);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<OficinaResponse> filtrarPorCor(CorAdministradora cor, Pageable pageable) {
-        return oficinaRepository.findByCorCriador(cor, pageable)
-                .map(OficinaResponse::fromEntity);
+    public PageResponse<OficinaResponse> filtrarPorCor(CorAdministradora cor, Pageable pageable) {
+
+        Page<Oficina> page = oficinaRepository.findByCorCriador(cor, pageable);
+
+        return PageResponse.fromPage(page, OficinaResponse::fromEntity);
     }
 
     // ==================== CALENDÁRIO ====================

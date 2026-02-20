@@ -21,19 +21,17 @@ public interface OficinaService {
     OficinaResponse getById(Long id);
 
     // Listagem e Filtros
-    Page<OficinaResponse> listarTodas(Pageable pageable);
-    Page<OficinaResponse> filtrarPorTipo(TipoOficina tipo, Pageable pageable);
-    Page<OficinaResponse> filtrarPorCidade(String cidade, Pageable pageable);
-    Page<OficinaResponse> filtrarPorPeriodo(LocalDate dataInicio, LocalDate dataFim, Pageable pageable);
-    Page<OficinaResponse> filtrarPorData(LocalDate data, Pageable pageable);
-    Page<OficinaResponse> filtrarCombinado(TipoOficina tipo, String cidade,
-                                           LocalDate dataInicio, LocalDate dataFim,
-                                           Pageable pageable);
-    Page<OficinaResponse> filtrarPorPeriodoMercadologico(Pageable pageable);
-    Page<OficinaResponse> filtrarPorPeriodoMensal(Pageable pageable);
-    Page<OficinaResponse> filtrarPorStatus(StatusOficina status, Pageable pageable);
-    Page<OficinaResponse> filtrarPorCor(CorAdministradora cor, Pageable pageable);
-
+    PageResponse<OficinaResponse> filtrarPorTipo(TipoOficina tipo, Pageable pageable);
+    PageResponse<OficinaResponse> filtrarPorCidade(String cidade, Pageable pageable);
+    PageResponse<OficinaResponse> filtrarPorPeriodo(LocalDate dataInicio, LocalDate dataFim, Pageable pageable);
+    PageResponse<OficinaResponse> filtrarPorData(LocalDate data, Pageable pageable);
+    PageResponse<OficinaResponse> filtrarCombinado(TipoOficina tipo, String cidade,
+                                                   LocalDate dataInicio, LocalDate dataFim,
+                                                   Pageable pageable);
+    PageResponse<OficinaResponse> filtrarPorPeriodoMercadologico(Pageable pageable);
+    PageResponse<OficinaResponse> filtrarPorPeriodoMensal(Pageable pageable);
+    PageResponse<OficinaResponse> filtrarPorStatus(StatusOficina status, Pageable pageable);
+    PageResponse<OficinaResponse> filtrarPorCor(CorAdministradora cor, Pageable pageable);
     // Calendário
     List<OficinaResponse> buscarPorMes(int ano, int mes);
 }
