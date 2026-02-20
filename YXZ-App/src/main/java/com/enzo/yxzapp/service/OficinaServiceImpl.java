@@ -55,9 +55,7 @@ public class OficinaServiceImpl implements OficinaService {
         // Status inicial
         oficina.setStatus(StatusOficina.AGENDADA);
 
-        // Informações do criador
-        oficina.setCriadorNome(criador.getNome());
-        oficina.setCorCriador(criador.getCorAdministradora());
+        // Relacionamento com criador
         oficina.setCriador(criador);
 
         // Salvar
