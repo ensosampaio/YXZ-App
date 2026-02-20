@@ -125,12 +125,16 @@ public class OficinaServiceImpl implements OficinaService {
 
     @Override
     public PageResponse<OficinaResponse> list(Pageable pageable) {
-        return null;
+        Page<Oficina> page = oficinaRepository.findAll(pageable);
+        return PageResponse.fromPage(page, OficinaResponse::fromEntity);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public OficinaResponse getById(Long id) {
-        return OficinaResponse.fromEntity(oficinaRepository.findById(id).orElseThrow(() -> new NotFoundException("Oficina inexistente")));
+        return oficinaRepository.findById(id)
+                .map(OficinaResponse::fromEntity)
+                .orElseThrow(() -> new NotFoundException("Oficina não encontrada"));
     }
 
     @Override
