@@ -53,10 +53,6 @@ public class Oficina {
     @Column(nullable = false)
     private StatusOficina status = StatusOficina.AGENDADA;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "criador_id", nullable = false)
-    private User criador;
-
     @Column(name = "criador_nome", nullable = false)
     private String criadorNome;
 
@@ -64,16 +60,18 @@ public class Oficina {
     @Column(name = "cor_criador", nullable = false)
     private CorAdministradora corCriador;
 
+    @Column(name = "criador_id", nullable = false)
+    private Long criadorId;
+
     @CreationTimestamp
     @Column(name = "data_criacao", nullable = false, updatable = false)
     private LocalDateTime dataCriacao;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ultimo_atualizador_id")
-    private User ultimoAtualizador;
-
     @Column(name = "ultimo_atualizador_nome")
     private String ultimoAtualizadorNome;
+
+    @Column(name = "ultimo_atualizador_id")
+    private Long ultimoAtualizadorId;
 
     @UpdateTimestamp
     @Column(name = "data_atualizacao")
