@@ -1,5 +1,7 @@
 package com.enzo.yxzapp.repository;
 
+import com.enzo.yxzapp.enums.CorAdministradora;
+import com.enzo.yxzapp.enums.StatusOficina;
 import com.enzo.yxzapp.enums.TipoOficina;
 import com.enzo.yxzapp.model.Oficina;
 import org.springframework.data.domain.Page;
@@ -44,5 +46,12 @@ public interface OficinaRepository extends JpaRepository<Oficina, Long> {
     // Buscar oficinas de um mês específico (para calendário - sem paginação)
     @Query("SELECT o FROM Oficina o WHERE YEAR(o.data) = :ano AND MONTH(o.data) = :mes")
     List<Oficina> findByMes(@Param("ano") int ano, @Param("mes") int mes);
+
+    // Filtro por status
+    Page<Oficina> findByStatus(StatusOficina status, Pageable pageable);
+
+    // Filtro por cor do criador
+    Page<Oficina> findByCorCriador(CorAdministradora cor, Pageable pageable);
 }
+
 
