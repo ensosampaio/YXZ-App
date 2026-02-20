@@ -23,7 +23,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/oficinas")
+@RequestMapping("/oficinas")
 public class OficinaController {
 
     private final OficinaService oficinaService;

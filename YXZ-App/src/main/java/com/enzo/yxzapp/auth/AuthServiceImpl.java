@@ -31,7 +31,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public LoginResponse login(LoginRequest req) {
        Authentication authentication = authenticationManager.authenticate(
-               new UsernamePasswordAuthenticationToken(req.email(), req.senha())
+               new UsernamePasswordAuthenticationToken(req.email(), req.password())
        );
         User user = userRepository.findByEmail(req.email()).orElseThrow(() -> new BadCredentialsException("Credencial Invalida"));
 
