@@ -11,4 +11,5 @@ public interface UserService {
      UserResponse update (Long id, UpdateUserRequest req);
      PageResponse<UserResponse> list(Pageable pageable);
      UserResponse getById(Long id);
+
 }

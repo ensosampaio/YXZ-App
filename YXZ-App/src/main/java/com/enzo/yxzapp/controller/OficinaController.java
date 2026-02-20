@@ -3,6 +3,7 @@ package com.enzo.yxzapp.controller;
 import com.enzo.yxzapp.dto.common.PageResponse;
 import com.enzo.yxzapp.dto.oficina.CreateOficinaRequest;
 import com.enzo.yxzapp.dto.oficina.OficinaResponse;
+import com.enzo.yxzapp.dto.oficina.UpdateViaModalRequest;
 import com.enzo.yxzapp.model.Oficina;
 import com.enzo.yxzapp.service.OficinaService;
 import org.springframework.data.domain.Page;
@@ -27,7 +28,7 @@ public class OficinaController {
         return oficinaService.create(request);
     }
 
-    public OficinaResponse update(Long id, CreateOficinaRequest request){
+    public OficinaResponse update(Long id, UpdateViaModalRequest request){
         return oficinaService.update(id,request);
     }
 
