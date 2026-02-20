@@ -7,6 +7,7 @@ import com.enzo.yxzapp.dto.oficina.UpdateViaModalRequest;
 import com.enzo.yxzapp.enums.Role;
 import com.enzo.yxzapp.enums.StatusOficina;
 import com.enzo.yxzapp.exception.BadRequestException;
+import com.enzo.yxzapp.exception.NotFoundException;
 import com.enzo.yxzapp.model.Oficina;
 import com.enzo.yxzapp.model.User;
 import com.enzo.yxzapp.repository.OficinaRepository;
@@ -60,8 +61,58 @@ public class OficinaServiceImpl implements OficinaService {
 
 
     @Override
+    @Transactional
     public OficinaResponse update(Long id, UpdateViaModalRequest req) {
-        return null;
+        // Buscar usuário logado
+        User atualizador = getUsuarioLogado();
+
+        // Buscar oficina
+        Oficina oficina = oficinaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Oficina não encontrada"));
+
+        // Atualizar campos (PATCH parcial - só atualiza se vier preenchido)
+
+        // Status
+        if (req.status() != null) {
+            oficina.setStatus(req.status());
+        }
+
+        // Instrutores
+        if (req.instrutores() != null) {
+            oficina.setInstrutores(req.instrutores());
+        }
+
+        // Avaliação da escola (1-10)
+        if (req.avaliacaoEscola() != null) {
+            // Validação extra (além do @Min @Max)
+            if (req.avaliacaoEscola() < 1 || req.avaliacaoEscola() > 10) {
+                throw new BadRequestException("Avaliação deve ser entre 1 e 10");
+            }
+            oficina.setAvaliacaoEscola(req.avaliacaoEscola());
+        }
+
+        // Quantitativo de alunos
+        if (req.quantitativoAluno() != null) {
+            if (req.quantitativoAluno() < 0) {
+                throw new BadRequestException("Quantitativo de alunos não pode ser negativo");
+            }
+            oficina.setQuantitativoAluno(req.quantitativoAluno());
+        }
+
+        // Acompanhante da turma
+        if (req.acompanhanteTurma() != null && !req.acompanhanteTurma().isBlank()) {
+            oficina.setAcompanhanteTurma(req.acompanhanteTurma().trim());
+        }
+
+        // Registrar quem atualizou (snapshot)
+        oficina.setUltimoAtualizadorNome(atualizador.getNome());
+        oficina.setUltimoAtualizadorId(atualizador.getId());
+
+        // Salvar
+        Oficina atualizada = oficinaRepository.save(oficina);
+
+        // Retornar response
+        return OficinaResponse.fromEntity(atualizada);
     }
 
     @Override
@@ -71,7 +122,7 @@ public class OficinaServiceImpl implements OficinaService {
 
     @Override
     public OficinaResponse getById(Long id) {
-        return null;
+        return OficinaResponse.fromEntity(oficinaRepository.findById(id).orElseThrow(() -> new NotFoundException("Oficina inexistente")));
     }
 
 
