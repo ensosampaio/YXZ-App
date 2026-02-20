@@ -6,6 +6,7 @@ import com.enzo.yxzapp.dto.oficina.OficinaResponse;
 import com.enzo.yxzapp.model.Oficina;
 import com.enzo.yxzapp.service.OficinaService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,8 +19,8 @@ public class OficinaController {
         this.oficinaService = oficinaService;
     }
 
-    public PageResponse<OficinaResponse> list(){
-        return oficinaService.list();
+    public PageResponse<OficinaResponse> list(Pageable pageable){
+        return oficinaService.list(pageable);
     }
 
     public OficinaResponse create(CreateOficinaRequest request){
