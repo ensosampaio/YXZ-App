@@ -29,7 +29,7 @@ public class OficinaController {
     }
 
     public OficinaResponse update(Long id, UpdateViaModalRequest request){
-        return oficinaService.update(id,request);
+        return oficinaService.update(id, request);
     }
 
     public OficinaResponse getById(Long id){
