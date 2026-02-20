@@ -136,7 +136,7 @@ public class OficinaServiceImpl implements OficinaService {
                 .map(OficinaResponse::fromEntity)
                 .orElseThrow(() -> new NotFoundException("Oficina não encontrada"));
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public PageResponse<OficinaResponse> filtrarPorTipo(TipoOficina tipo, Pageable pageable) {
