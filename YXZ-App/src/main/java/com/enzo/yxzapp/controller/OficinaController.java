@@ -32,5 +32,9 @@ public class OficinaController {
         return oficinaService.update(id,request);
     }
 
+    public OficinaResponse getById(Long id){
+        return oficinaService.getById(id);
+    }
+
 
 }
