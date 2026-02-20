@@ -22,10 +22,10 @@ public record OficinaResponse(
         Integer avaliacaoEscola,
         Integer quantitativoAluno,
         String acompanhanteTurma,
-        String criadorNome,
-        CorAdministradora corCriador,
+        String criadorNome,              // ← Campo direto
+        CorAdministradora corCriador,    // ← Campo direto
         LocalDateTime dataCriacao,
-        String ultimoAtualizadorNome,
+        String ultimoAtualizadorNome,    // ← Campo direto
         LocalDateTime dataAtualizacao
 ) {
     public static OficinaResponse fromEntity(Oficina o) {
@@ -44,10 +44,10 @@ public record OficinaResponse(
                 o.getAvaliacaoEscola(),
                 o.getQuantitativoAluno(),
                 o.getAcompanhanteTurma(),
-                o.getCriadorNome(),
-                o.getCorCriador(),
+                o.getCriadorNome(),           // ← Simples!
+                o.getCorCriador(),            // ← Simples!
                 o.getDataCriacao(),
-                o.getUltimoAtualizadorNome(),
+                o.getUltimoAtualizadorNome(), // ← Simples!
                 o.getDataAtualizacao()
         );
     }
