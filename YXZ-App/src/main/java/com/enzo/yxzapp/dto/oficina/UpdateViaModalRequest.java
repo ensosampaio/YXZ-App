@@ -18,5 +18,7 @@ public record UpdateViaModalRequest(
         @Min(value = 0, message = "Quantitativo não pode ser negativo")
         Integer quantitativoAluno,
 
-        String acompanhanteTurma
+        String acompanhanteTurma,
+
+        String motivoCancelamento
 ) {}
