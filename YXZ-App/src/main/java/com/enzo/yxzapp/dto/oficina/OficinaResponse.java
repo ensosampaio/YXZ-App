@@ -26,7 +26,8 @@ public record OficinaResponse(
         CorAdministradora corCriador,    // ← Campo direto
         LocalDateTime dataCriacao,
         String ultimoAtualizadorNome,    // ← Campo direto
-        LocalDateTime dataAtualizacao
+        LocalDateTime dataAtualizacao,
+        String motivoCancelamento
 ) {
     public static OficinaResponse fromEntity(Oficina o) {
         return new OficinaResponse(
@@ -48,7 +49,8 @@ public record OficinaResponse(
                 o.getCorCriador(),            // ← Simples!
                 o.getDataCriacao(),
                 o.getUltimoAtualizadorNome(), // ← Simples!
-                o.getDataAtualizacao()
+                o.getDataAtualizacao(),
+                o.getMotivoCancelamento()
         );
     }
 }
