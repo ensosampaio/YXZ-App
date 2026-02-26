@@ -87,6 +87,16 @@ public class OficinaServiceImpl implements OficinaService {
             oficina.setStatus(req.status());
         }
 
+        // Motivo de Cancelamento
+        if (req.motivoCancelamento() != null) {
+            oficina.setMotivoCancelamento(req.motivoCancelamento());
+        }
+
+        // REGRA DE NEGÓCIO: Se não estiver cancelada, garantimos que o motivo é nulo
+        if (oficina.getStatus() != StatusOficina.CANCELADA) {
+            oficina.setMotivoCancelamento(null);
+        }
+
         // Instrutores
         if (req.instrutores() != null) {
             oficina.setInstrutores(req.instrutores());
