@@ -90,4 +90,7 @@ public class Oficina {
 
     @Column(name = "acompanhante_turma")
     private String acompanhanteTurma;
+
+    @Column(name = "Motivo_Cancelamento")
+    private String motivoCancelamento;
 }
