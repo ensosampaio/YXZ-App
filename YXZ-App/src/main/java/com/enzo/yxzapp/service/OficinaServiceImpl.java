@@ -80,7 +80,7 @@ public class OficinaServiceImpl implements OficinaService {
         Oficina oficina = oficinaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Oficina não encontrada"));
 
-        // Atualizar campos (PATCH parcial - só atualiza se vier preenchido)
+        // --- Atualizar campos (PATCH parcial - só atualiza se não for null) ---
 
         // Status
         if (req.status() != null) {
@@ -92,20 +92,13 @@ public class OficinaServiceImpl implements OficinaService {
             oficina.setInstrutores(req.instrutores());
         }
 
-        // Avaliação da escola (1-10)
+        // Avaliação da escola (Correção: Adicionado verificação de null)
         if (req.avaliacaoEscola() != null) {
-            // Validação extra (além do @Min @Max)
-            if (req.avaliacaoEscola() < 1 || req.avaliacaoEscola() > 10) {
-                throw new BadRequestException("Avaliação deve ser entre 1 e 10");
-            }
             oficina.setAvaliacaoEscola(req.avaliacaoEscola());
         }
 
         // Quantitativo de alunos
         if (req.quantitativoAluno() != null) {
-            if (req.quantitativoAluno() < 0) {
-                throw new BadRequestException("Quantitativo de alunos não pode ser negativo");
-            }
             oficina.setQuantitativoAluno(req.quantitativoAluno());
         }
 
