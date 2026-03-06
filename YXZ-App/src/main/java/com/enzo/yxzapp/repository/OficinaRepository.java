@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -74,4 +75,12 @@ public interface OficinaRepository extends JpaRepository<Oficina, Long> {
             @Param("ano") int ano,
             @Param("mes") int mes
     );
+
+    @Modifying
+    @Query("UPDATE Oficina o SET o.criadorNome = :novoNome WHERE o.criadorId = :usuarioId")
+    void atualizarNomeCriador(@Param("usuarioId") Long usuarioId, @Param("novoNome") String novoNome);
+
+    @Modifying
+    @Query("UPDATE Oficina o SET o.ultimoAtualizadorNome = :novoNome WHERE o.ultimoAtualizadorId = :usuarioId")
+    void atualizarNomeAtualizador(@Param("usuarioId") Long usuarioId, @Param("novoNome") String novoNome);
 }

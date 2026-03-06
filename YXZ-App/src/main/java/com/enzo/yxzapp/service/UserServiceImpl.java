@@ -9,6 +9,7 @@ import com.enzo.yxzapp.enums.Role;
 import com.enzo.yxzapp.exception.BadRequestException;
 import com.enzo.yxzapp.exception.NotFoundException;
 import com.enzo.yxzapp.model.User;
+import com.enzo.yxzapp.repository.OficinaRepository;
 import com.enzo.yxzapp.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,10 +22,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
+    private final OficinaRepository oficinaRepository;
 
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder encoder) {
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder encoder, OficinaRepository oficinaRepository) {
         this.userRepository = userRepository;
         this.encoder = encoder;
+        this.oficinaRepository = oficinaRepository;
     }
 
     @Override
@@ -58,18 +61,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional // <-- NÃO ESQUEÇA DESTA ANOTAÇÃO AQUI!
     public UserResponse update(Long id, UpdateUserRequest req) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
         boolean isRootUser = user.getRole() == Role.ROOT;
+        boolean nomeMudou = false;
 
-        // nome (PATCH parcial)
+        // 1. NOME (PATCH parcial com verificação de mudança)
         if (req.nome() != null && !req.nome().isBlank()) {
-            user.setNome(normalizeName(req.nome()));
+            String novoNome = normalizeName(req.nome()); // Usa o seu metodo de normalizar
+
+            // Verifica se o nome realmente mudou
+            if (!novoNome.equals(user.getNome())) {
+                user.setNome(novoNome);
+                nomeMudou = true; // Marca que mudou!
+            }
         }
 
-        // ativo (PATCH parcial)
+        // 2. ATIVO (PATCH parcial)
         if (req.ativo() != null) {
             if (isRootUser && !req.ativo()) {
                 throw new BadRequestException("Não é permitido desativar o usuário ROOT");
@@ -77,7 +88,7 @@ public class UserServiceImpl implements UserService {
             user.setAtivo(req.ativo());
         }
 
-        // role/cor (PATCH parcial) — valida conjunto
+        // 3. ROLE/COR (PATCH parcial) — valida conjunto
         Role newRole = (req.role() != null) ? req.role() : user.getRole();
 
         // Bloqueios envolvendo ROOT
@@ -105,7 +116,15 @@ public class UserServiceImpl implements UserService {
         user.setRole(newRole);
         user.setCorAdministradora(newColor);
 
+        // 4. SALVAR O USUÁRIO
         User updated = userRepository.save(user);
+
+        // 5. ATUALIZAR AS OFICINAS SE O NOME MUDOU
+        if (nomeMudou) {
+            oficinaRepository.atualizarNomeCriador(user.getId(), updated.getNome());
+            oficinaRepository.atualizarNomeAtualizador(user.getId(), updated.getNome());
+        }
+
         return UserResponse.fromEntity(updated);
     }
 
