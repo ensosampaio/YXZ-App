@@ -8,12 +8,14 @@ import com.enzo.yxzapp.enums.CorAdministradora;
 import com.enzo.yxzapp.enums.Role;
 import com.enzo.yxzapp.enums.StatusOficina;
 import com.enzo.yxzapp.enums.TipoOficina;
+import com.enzo.yxzapp.event.UsuarioMudouNomeEvent;
 import com.enzo.yxzapp.exception.BadRequestException;
 import com.enzo.yxzapp.exception.NotFoundException;
 import com.enzo.yxzapp.model.Oficina;
 import com.enzo.yxzapp.model.User;
 import com.enzo.yxzapp.repository.OficinaRepository;
 import com.enzo.yxzapp.repository.UserRepository;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -265,4 +267,14 @@ public class OficinaServiceImpl implements OficinaService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
+
+    @EventListener
+    public void handleUsuarioMudouNomeEvent(UsuarioMudouNomeEvent event) {
+        oficinaRepository.atualizarNomeCriador(event.usuarioId(), event.novoNome());
+        oficinaRepository.atualizarNomeAtualizador(event.usuarioId(), event.novoNome());
+    }
+
+
+
+
 }
