@@ -96,4 +96,7 @@ public class Oficina {
 
     @Column(name = "pasta_drive_id")
     private String pastaDriveId;
+
+    @Column(name = "link_pasta_drive")
+    private String linkPastaDrive;
 }
