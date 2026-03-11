@@ -20,6 +20,10 @@ public class GoogleDriveService {
     @Value("${google.drive.folder.id}")
     private String pastaMaeId;
 
+    public String getPastaMaeId() {
+        return pastaMaeId;
+    }
+
     public Drive getDriveService() throws IOException {
         GoogleCredentials credentials = GoogleCredentials.fromStream(
                 new ClassPathResource("credentials.json").getInputStream()
@@ -47,6 +51,7 @@ public class GoogleDriveService {
         return pastaCriada.getId();
     }
 
+    // Mantido caso você precise fazer uploads síncronos no futuro
     public String uploadFoto(MultipartFile arquivo, String pastaOficinaId) throws IOException {
         Drive driveService = getDriveService();
 
@@ -67,5 +72,3 @@ public class GoogleDriveService {
         return fotoEnviada.getWebViewLink();
     }
 }
-
-
