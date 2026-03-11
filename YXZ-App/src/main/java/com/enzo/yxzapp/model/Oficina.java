@@ -93,4 +93,7 @@ public class Oficina {
 
     @Column(name = "Motivo_Cancelamento")
     private String motivoCancelamento;
+
+    @Column(name = "pasta_drive_id")
+    private String pastaDriveId;
 }
