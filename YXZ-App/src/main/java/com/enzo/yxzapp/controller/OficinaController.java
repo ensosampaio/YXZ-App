@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -197,4 +198,10 @@ public class OficinaController {
         return oficinaService.buscarPorMes(ano, mes);
     }
 
+    // ==================== FOTOS ====================
+    @PostMapping(value = "/{id}/fotos", consumes = "multipart/form-data")
+    public ResponseEntity<Void> uploadFotos(@PathVariable Long id, @RequestParam("fotos") List<MultipartFile> fotos) {
+        oficinaService.receberFotos(id, fotos);
+        return ResponseEntity.accepted().build(); // Retorna 202 (Aceito para processamento) instantaneamente!
+    }
 }
