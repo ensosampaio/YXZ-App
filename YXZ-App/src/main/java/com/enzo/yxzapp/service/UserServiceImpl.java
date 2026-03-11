@@ -6,11 +6,13 @@ import com.enzo.yxzapp.dto.user.UpdateUserRequest;
 import com.enzo.yxzapp.dto.user.UserResponse;
 import com.enzo.yxzapp.enums.CorAdministradora;
 import com.enzo.yxzapp.enums.Role;
+import com.enzo.yxzapp.event.UsuarioMudouNomeEvent;
 import com.enzo.yxzapp.exception.BadRequestException;
 import com.enzo.yxzapp.exception.NotFoundException;
 import com.enzo.yxzapp.model.User;
 import com.enzo.yxzapp.repository.OficinaRepository;
 import com.enzo.yxzapp.repository.UserRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,12 +24,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
-    private final OficinaRepository oficinaRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder encoder, OficinaRepository oficinaRepository) {
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder encoder, ApplicationEventPublisher eventPublisher) {
         this.userRepository = userRepository;
         this.encoder = encoder;
-        this.oficinaRepository = oficinaRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -61,7 +63,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional // <-- NÃO ESQUEÇA DESTA ANOTAÇÃO AQUI!
+    @Transactional
     public UserResponse update(Long id, UpdateUserRequest req) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
@@ -121,8 +123,7 @@ public class UserServiceImpl implements UserService {
 
         // 5. ATUALIZAR AS OFICINAS SE O NOME MUDOU
         if (nomeMudou) {
-            oficinaRepository.atualizarNomeCriador(user.getId(), updated.getNome());
-            oficinaRepository.atualizarNomeAtualizador(user.getId(), updated.getNome());
+            eventPublisher.publishEvent(new UsuarioMudouNomeEvent(user.getId(), updated.getNome()));
         }
 
         return UserResponse.fromEntity(updated);
