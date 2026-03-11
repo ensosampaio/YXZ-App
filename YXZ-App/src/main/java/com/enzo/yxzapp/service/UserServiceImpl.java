@@ -10,7 +10,6 @@ import com.enzo.yxzapp.event.UsuarioMudouNomeEvent;
 import com.enzo.yxzapp.exception.BadRequestException;
 import com.enzo.yxzapp.exception.NotFoundException;
 import com.enzo.yxzapp.model.User;
-import com.enzo.yxzapp.repository.OficinaRepository;
 import com.enzo.yxzapp.repository.UserRepository;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
