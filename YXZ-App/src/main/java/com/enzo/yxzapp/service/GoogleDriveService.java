@@ -47,6 +47,25 @@ public class GoogleDriveService {
         return pastaCriada.getId();
     }
 
+    public String uploadFoto(MultipartFile arquivo, String pastaOficinaId) throws IOException {
+        Drive driveService = getDriveService();
 
+        File fileMetadata = new File();
+        fileMetadata.setName(arquivo.getOriginalFilename());
+        fileMetadata.setParents(Collections.singletonList(pastaOficinaId)); // Coloca na pasta certa
 
+        InputStreamContent mediaContent = new InputStreamContent(
+                arquivo.getContentType(),
+                arquivo.getInputStream()
+        );
+
+        File fotoEnviada = driveService.files().create(fileMetadata, mediaContent)
+                .setFields("id, webViewLink")
+                .execute();
+
+        // Retorna o link para visualizar a foto no navegador
+        return fotoEnviada.getWebViewLink();
+    }
 }
+
+
