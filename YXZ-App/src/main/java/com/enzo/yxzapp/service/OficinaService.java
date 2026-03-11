@@ -9,6 +9,7 @@ import com.enzo.yxzapp.enums.StatusOficina;
 import com.enzo.yxzapp.enums.TipoOficina;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -34,4 +35,5 @@ public interface OficinaService {
     PageResponse<OficinaResponse> filtrarPorCor(CorAdministradora cor, Pageable pageable);
     // Calendário
     List<OficinaResponse> buscarPorMes(int ano, int mes);
+    void receberFotos(Long id, List<MultipartFile> fotos);
 }
