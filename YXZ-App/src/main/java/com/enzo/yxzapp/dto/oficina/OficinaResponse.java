@@ -27,7 +27,8 @@ public record OficinaResponse(
         LocalDateTime dataCriacao,
         String ultimoAtualizadorNome,    // ← Campo direto
         LocalDateTime dataAtualizacao,
-        String motivoCancelamento
+        String motivoCancelamento,
+        String linkPastaDrive
 ) {
     public static OficinaResponse fromEntity(Oficina o) {
         return new OficinaResponse(
@@ -50,7 +51,8 @@ public record OficinaResponse(
                 o.getDataCriacao(),
                 o.getUltimoAtualizadorNome(), // ← Simples!
                 o.getDataAtualizacao(),
-                o.getMotivoCancelamento()
+                o.getMotivoCancelamento(),
+                o.getLinkPastaDrive()
         );
     }
 }
